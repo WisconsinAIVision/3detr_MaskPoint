@@ -1,5 +1,16 @@
-# 3DETR: An End-to-End Transformer Model for 3D Object Detection
+# MaskPoint -- 3DETR Finetuning
 
+## [ECCV 2022] Masked Discrimination for Self-Supervised Learning on Point Clouds
+
+[Haotian Liu](https://hliu.cc), [Mu Cai](https://sites.google.com/view/mucai), [Yong Jae Lee](https://pages.cs.wisc.edu/~yongjaelee/)
+
+Please check out our paper [here](https://arxiv.org/abs/2203.11183).
+
+<div align="center">
+  <img src=".github/maskpoint.png" width="640">
+</div>
+
+---
 
 This repo is inherited from the official repo [3DETR](https://github.com/facebookresearch/3detr).  We add the functionality of loading pretrained weights from 
 [MaskPoint](https://arxiv.org/abs/2203.11183). The pretraining code can be found [here](https://github.com/haotian-liu/MaskPoint). Major modifications are 
@@ -28,6 +39,7 @@ use the following weights and scripts:
 
 
 ***
+# 3DETR: An End-to-End Transformer Model for 3D Object Detection
 
 PyTorch implementation and models for **3DETR**.
 
