@@ -21,7 +21,6 @@ from utils.misc import my_worker_init_fn
 from utils.io import save_checkpoint, resume_if_possible
 from utils.logger import Logger
 
-
 def make_args_parser():
     parser = argparse.ArgumentParser("3D Detection Using Transformers", add_help=False)
 
@@ -140,6 +139,7 @@ def make_args_parser():
     ##### Distributed Training #####
     parser.add_argument("--ngpus", default=1, type=int)
     parser.add_argument("--dist_url", default="tcp://localhost:12345", type=str)
+    parser.add_argument("--ckpts_load", default=None, type=str, help="pretrained checkpoint weights")
 
     return parser
 
@@ -353,6 +353,32 @@ def main(local_rank, args):
 
     datasets, dataset_config = build_dataset(args)
     model, _ = build_model(args, dataset_config)
+
+
+    if args.ckpts_load != None:
+        state_dict_model = model.state_dict()
+        print('############# Load Pretrained Weights ###################') 
+        state_dict = torch.load(args.ckpts_load, map_location='cpu')
+        base_ckpt = {k.replace("module.transformer_q.blocks", "encoder"): v for k, v in state_dict['base_model'].items()}
+        base_ckpt = {k.replace("transformer_q.blocks", "encoder"): v for k, v in base_ckpt.items()}
+        base_ckpt = {k.replace("module.transformer_q.encoder", "pre_encoder"): v for k, v in base_ckpt.items()}
+        state_dict = {k.replace("transformer_q.encoder", "pre_encoder"): v for k, v in base_ckpt.items()}
+        base_ckpt = {k.replace("module.transformer_q.pos_embed", "pos_embed"): v for k, v in base_ckpt.items()}
+        state_dict = {k.replace("transformer_q.pos_embed", "pos_embed"): v for k, v in base_ckpt.items()}
+        local_rank = int(os.environ.get("LOCAL_RANK", 0))
+        for layername in state_dict_model:
+            if layername in state_dict:
+                param = state_dict[layername]
+                if not isinstance(param, torch.Tensor):
+                    param = torch.from_numpy(param)
+                state_dict_model[layername].copy_(param)
+                if (local_rank == 0):
+                    print(f"Init layer:\t{layername}")
+            else:
+                print(f"Not found:\t{layername}")
+        model.load_state_dict(state_dict_model, strict=True)
+    
+
     model = model.cuda(local_rank)
     model_no_ddp = model
 

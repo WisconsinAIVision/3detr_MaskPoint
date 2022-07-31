@@ -9,3 +9,6 @@ utils/build/*
 
 # outputs
 outputs/
+
+.vscode/
+checkpoints/

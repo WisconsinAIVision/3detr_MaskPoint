@@ -1,5 +1,34 @@
 # 3DETR: An End-to-End Transformer Model for 3D Object Detection
 
+
+This repo is inherited from the official repo [3DETR](https://github.com/facebookresearch/3detr).  We add the functionality of loading pretrained weights from 
+[MaskPoint](https://arxiv.org/abs/2203.11183). The pretraining code can be found [here](https://github.com/haotian-liu/MaskPoint). Major modifications are 
+at [main.py](main.py). You should prepare the data and environment as the original repo.
+
+To start, put the downloaded checkpoints into the folder `checkpoints`.
+
+To train and validate the standard 3DETR model (3 encoder layers) and the larger 3DETR model (12 encoder layers), 
+use the following weights and scripts:
+
+|    # Encoder layer           | Training script | Pretrained weights | Test script | Finetuned weights | mAP(0.25) | mAP(0.50) |  
+|---------------------------------------------|----------:|:-------:|:-------:|:-------:|:-------:|:-------:|
+| 3 | [train_enc3x.sh](train_enc3x.sh) | [here](https://static.hliu.cc/files/projects/maskpoint/checkpoints/pretrain_scannet_medium_enc3x.pth) | [test_enc3x.sh](test_enc3x.sh) | [here](https://static.hliu.cc/files/projects/maskpoint/checkpoints/finetune_scannetv2_enc3x.pth) | 63.4 | 40.6 | 
+| 12 | [train_enc12x.sh](train_enc12x.sh) | [here](https://static.hliu.cc/files/projects/maskpoint/checkpoints/pretrain_scannet_medium_enc12x.pth) | [test_enc12x.sh](test_enc12x.sh) | [here](https://static.hliu.cc/files/projects/maskpoint/checkpoints/finetune_scannetv2_enc12x.pth) | 64.2 | 42.1 |
+
+
+## Citation
+```
+@article{liu2022masked,
+  title={Masked Discrimination for Self-Supervised Learning on Point Clouds},
+  author={Liu, Haotian and Cai, Mu and Lee, Yong Jae},
+  journal={arXiv preprint arXiv:2203.11183},
+  year={2022}
+}
+```
+
+
+***
+
 PyTorch implementation and models for **3DETR**.
 
 **3DETR** (**3D** **DE**tection **TR**ansformer) is a simpler alternative to complex hand-crafted 3D detection pipelines.

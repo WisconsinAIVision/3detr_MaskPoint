@@ -25,7 +25,8 @@ def build_dataset(args):
         "test": dataset_builder(
             dataset_config, 
             split_set="val", 
-            root_dir=args.dataset_root_dir, 
+            root_dir=args.dataset_root_dir,
+            meta_data_dir=args.meta_data_dir,
             use_color=args.use_color,
             augment=False
         ),

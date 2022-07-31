@@ -15,7 +15,6 @@ from torch import Tensor, nn
 from models.helpers import (ACTIVATION_DICT, NORM_DICT, WEIGHT_INIT_DICT,
                             get_clones)
 
-
 class TransformerEncoder(nn.Module):
 
     def __init__(self, encoder_layer, num_layers,
